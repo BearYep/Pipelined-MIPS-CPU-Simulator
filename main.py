@@ -28,7 +28,7 @@ class CPU:
 app = CPU()
 
 def main():
-    path = 'text.txt'
+    path = './input/test1.txt'
     f = open(path, 'r', encoding='utf-8')
     lines = f.read().splitlines()
     print(lines)
