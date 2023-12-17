@@ -4,10 +4,10 @@ mem = [] #length = 32 , per length 1 words
 class CPU:
     def __init__(self):
 
-        self.IF_ID = []
-        self.ID_EX = []
-        self.EX_MEM = []
-        self.MEM_WB = []
+        self.IF_ID = None
+        self.ID_EX = None
+        self.EX_MEM = None
+        self.MEM_WB = None
 
         self.instuction_mem = []
         self.cycle = 0
@@ -15,44 +15,66 @@ class CPU:
 
     def readInstruction(self, ins):
         self.instuction_mem = ins
-        if(ins.split()[0]) == 'lw':
+        if(ins[0].split()[0]) == 'lw':
             pass
             #opcode、read reg 
-        elif(ins.split()[0]) == 'sw':
+        elif(ins[0].split()[0]) == 'sw':
             pass
-        elif(ins.split()[0]) == 'add':
+        elif(ins[0].split()[0]) == 'add':
             pass
-        elif(ins.split()[0]) == 'sub':
+        elif(ins[0].split()[0]) == 'sub':
             pass
-        elif(ins.split()[0]) == 'beq':
+        elif(ins[0].split()[0]) == 'beq':
             pass
         else:
             print("error")
             return
         
-        print(ins.split())
+        print(ins[0].split())
     
     def IF(self):
-        self.IF_ID = self.instuction_mem
-        print("IF stage...")
+        if self.instuction_mem:
+            self.IF_ID = self.instuction_mem[0]
+        print(f"IF stage... {self.IF_ID}")
+
     def ID(self):
         if self.IF_ID:
             self.ID_EX = self.IF_ID
             self.IF_ID = None
-    def EXE(self):
-        pass
+        print(f"ID stage... {self.ID_EX}")
+
+    def EX(self):
+        if self.ID_EX:
+            self.EX_MEM = self.ID_EX
+            self.ID_EX = None
+        print(f"EX stage... {self.EX_MEM}")
+
     def MEM(self):
-        pass
+        if self.EX_MEM:
+            self.MEM_WB = self.EX_MEM
+            self.EX_MEM = None
+        print(f"MEM stage... {self.MEM_WB}")
+
     def WB(self):
-        pass
+        if self.MEM_WB:
+            print(f"WB stage... {self.MEM_WB}")
+            self.MEM_WB = None
+        else:
+            print("WB stage... None")
     
     def run(self):
         while self.instuction_mem or self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB:
-            self.IF()
-            self.ID()
-            self.EXE()
-            self.MEM()
+            self.cycle = self.cycle + 1
+            print(f'Cycle {self.cycle}')
             self.WB()
+            self.MEM()
+            self.EX()
+            self.ID()
+            self.IF()
+            if self.instuction_mem:
+                del self.instuction_mem[0]
+            
+            
             
 app = CPU()
 
@@ -61,9 +83,11 @@ def main():
     f = open(path, 'r', encoding='utf-8')
     lines = f.read().splitlines()
     print(lines)
-    for line in lines:
-        app.readInstruction(line)
-        app.run()
+    app.readInstruction(lines)
+    # for line in lines:
+        # app.readInstruction(line)
+        # app.run()
+    app.run()
     f.close()
 
 if __name__ == "__main__":
