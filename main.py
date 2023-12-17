@@ -1,3 +1,5 @@
+import re
+
 reg = [1] * 32 #length = 32 , per length 1 words
 reg[0] = 0
 mem = [1] * 32 #length = 32 , per length 1 words
@@ -16,28 +18,45 @@ class CPU:
         self.cycle = 0
 
 
-    def readInstruction(self, ins):
-        self.instuction_mem = ins
-        if(ins[0].split()[0]) == 'lw':
+    # def readInstruction(self, ins):
+    #     self.instuction_mem = ins
+    
+    def calculate(self):
+
+        matches = re.findall(r'\d+', self.instuction_mem[0]) #拆出指令中的數字
+
+        if(self.instuction_mem[0].split()[0]) == 'lw':
+            rd = int(matches[0])
+            offset = int(matches[1])
+            base = int(matches[2])
+            reg[rd] = mem[int((offset/4)) + base]
+        elif(self.instuction_mem[0].split()[0]) == 'sw':
+            rd = int(matches[0])
+            offset = int(matches[1])
+            base = int(matches[2])
+            mem[int((offset/4)) + base] = reg[rd]
+        elif(self.instuction_mem[0].split()[0]) == 'add':
+            rd = int(matches[0])
+            rs = int(matches[1])
+            rt = int(matches[2])
+            reg[rd] = reg[rs] + reg[rt]
+        elif(self.instuction_mem[0].split()[0]) == 'sub':
+            rd = int(matches[0])
+            rs = int(matches[1])
+            rt = int(matches[2])
+            reg[rd] = reg[rs] - reg[rt]
+        elif(self.instuction_mem[0].split()[0]) == 'beq':
             pass
-            #opcode、read reg 
-        elif(ins[0].split()[0]) == 'sw':
-            pass
-        elif(ins[0].split()[0]) == 'add':
-            pass
-        elif(ins[0].split()[0]) == 'sub':
-            pass
-        elif(ins[0].split()[0]) == 'beq':
+        elif(None):
             pass
         else:
             print("error")
             return
-        
-        print(ins[0].split())
-    
+
     def IF(self):
         if self.instuction_mem:
             self.IF_ID = self.instuction_mem[0]
+            self.calculate()
         print(f"IF stage... {self.IF_ID}")
 
     def ID(self):
@@ -65,7 +84,8 @@ class CPU:
         else:
             print("WB stage... None")
     
-    def run(self):
+    def run(self, ins):
+        self.instuction_mem = ins
         while self.instuction_mem or self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB:
             self.cycle = self.cycle + 1
             print(f'Cycle {self.cycle}')
@@ -86,11 +106,13 @@ def main():
     f = open(path, 'r', encoding='utf-8')
     lines = f.read().splitlines()
     print(lines)
-    app.readInstruction(lines)
+    #app.readInstruction(lines)
     # for line in lines:
         # app.readInstruction(line)
         # app.run()
-    app.run()
+    app.run(lines)
+    print(reg)
+    print(mem)
     f.close()
 
 if __name__ == "__main__":
