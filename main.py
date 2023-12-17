@@ -1,5 +1,8 @@
-reg = [] #length = 32 , per length 1 words
-mem = [] #length = 32 , per length 1 words
+reg = [1] * 32 #length = 32 , per length 1 words
+reg[0] = 0
+mem = [1] * 32 #length = 32 , per length 1 words
+print(reg)
+print(mem)
 
 class CPU:
     def __init__(self):
