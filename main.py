@@ -6,7 +6,29 @@ mem = [1] * 32 #length = 32 , per length 1 words
 print(reg)
 print(mem)
 
+class regIns:
+    def __init__(self ,op ,num1, num2, num3):
+        if op == "lw" or op == "sw":
+            self.op = op
+            self.rd = num1
+            self.offset = num2
+            self.base = num3
+        elif op == "beq":
+            self.op = op
+            self.rs = num1
+            self.rt = num2
+            self.index = num3
+        elif op == "add" or op == "sub":
+            self.op = op
+            self.rd = num1
+            self.rs = num2
+            self.rt = num3
+        else:
+            print("error")
+            pass
+
 class CPU:
+
     def __init__(self):
 
         self.IF_ID = None
@@ -21,9 +43,9 @@ class CPU:
     # def readInstruction(self, ins):
     #     self.instuction_mem = ins
     
-    def calculate(self):
+    def calculate(self):    #do what opcode want (unfinished)
 
-        matches = re.findall(r'\d+', self.instuction_mem[0]) #拆出指令中的數字
+        matches = re.findall(r'\d+', self.instuction_mem[0])    #split num out (no need)
 
         if(self.instuction_mem[0].split()[0]) == 'lw':
             rd = int(matches[0])
@@ -55,8 +77,11 @@ class CPU:
 
     def IF(self):
         if self.instuction_mem:
-            self.IF_ID = self.instuction_mem[0]
-            self.calculate()
+            matches = re.findall(r'\d+', self.instuction_mem[0])
+            opcode = self.instuction_mem[0].split()[0]
+            self.IF_ID = regIns(opcode, int(matches[0]), int(matches[1]), int(matches[2]))
+            #self.IF_ID = self.instuction_mem[0]
+            #self.calculate()
         print(f"IF stage... {self.IF_ID}")
 
     def ID(self):
