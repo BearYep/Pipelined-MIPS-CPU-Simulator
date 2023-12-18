@@ -7,25 +7,45 @@ print(reg)
 print(mem)
 
 class regIns:
-    def __init__(self ,op ,num1, num2, num3):
+    def __init__(self, op, num1, num2, num3):
         if op == "lw" or op == "sw":
             self.op = op
             self.rd = num1
             self.offset = num2
             self.base = num3
-        elif op == "beq":
-            self.op = op
-            self.rs = num1
-            self.rt = num2
-            self.index = num3
+
+            self.rs = None
+            self.rt = None
+            self.index = None
         elif op == "add" or op == "sub":
             self.op = op
             self.rd = num1
             self.rs = num2
             self.rt = num3
+
+            self.offset = None
+            self.base = None
+            self.index = None
+        else:   #beq
+            self.op = op
+            self.rs = num1
+            self.rt = num2
+            self.index = num3
+
+            self.offset = None
+            self.base = None
+            self.rd = None
+
+    def __str__(self):
+        if self.op == "lw" or self.op == "sw":
+            return f"{self.op} ${self.rd}, {self.offset}(${self.base})"
+        elif self.op == "add" or self.op == "sub":
+            return f"{self.op} ${self.rd}, ${self.rs}, ${self.rt}"
+        elif self.op == "beq":
+            return f"{self.op} ${self.rs}, ${self.rt}, ${self.index}"
         else:
-            print("error")
-            pass
+            return "invalid instruction"       
+
 
 class CPU:
 
@@ -43,7 +63,7 @@ class CPU:
     # def readInstruction(self, ins):
     #     self.instuction_mem = ins
     
-    def calculate(self):    #do what opcode want (unfinished)
+    def calculate(self):    #do what opcode want (should write in exe?，get more info from stage and calculate)
 
         matches = re.findall(r'\d+', self.instuction_mem[0])    #split num out (no need)
 
@@ -69,8 +89,6 @@ class CPU:
             reg[rd] = reg[rs] - reg[rt]
         elif(self.instuction_mem[0].split()[0]) == 'beq':
             pass
-        elif(None):
-            pass
         else:
             print("error")
             return
@@ -82,6 +100,7 @@ class CPU:
             self.IF_ID = regIns(opcode, int(matches[0]), int(matches[1]), int(matches[2]))
             #self.IF_ID = self.instuction_mem[0]
             #self.calculate()
+        
         print(f"IF stage... {self.IF_ID}")
 
     def ID(self):
