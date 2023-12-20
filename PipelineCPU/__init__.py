@@ -1,11 +1,7 @@
 import re
 
-reg = [1] * 32 #length = 32 , per length 1 words
-mem = [1] * 32 #length = 32 , per length 1 words
-print(reg)
-print(mem)
+class pipelineRegister:
 
-class regIns:
     def __init__(self, op, num1, num2, num3):
         if op == "lw" or op == "sw":
             self.op = op
@@ -43,13 +39,15 @@ class regIns:
         elif self.op == "beq":
             return f"{self.op} ${self.rs}, ${self.rt}, ${self.index}"
         else:
-            return "invalid instruction"       
-
+            return "invalid instruction"   
 
 class CPU:
 
-    def __init__(self):
+    reg = [1] * 32 #length = 32 , per length 1 words
+    reg[0] = 0
+    mem = [1] * 32 #length = 32 , per length 1 words
 
+    def __init__(self):
         self.IF_ID = None
         self.ID_EX = None
         self.EX_MEM = None
@@ -70,22 +68,22 @@ class CPU:
             rd = int(matches[0])
             offset = int(matches[1])
             base = int(matches[2])
-            reg[rd] = mem[int((offset/4)) + base]
+            self.reg[rd] = self.mem[int((offset/4)) + base]
         elif(self.instuction_mem[0].split()[0]) == 'sw':
             rd = int(matches[0])
             offset = int(matches[1])
             base = int(matches[2])
-            mem[int((offset/4)) + base] = reg[rd]
+            self.mem[int((offset/4)) + base] = self.reg[rd]
         elif(self.instuction_mem[0].split()[0]) == 'add':
             rd = int(matches[0])
             rs = int(matches[1])
             rt = int(matches[2])
-            reg[rd] = reg[rs] + reg[rt]
+            self.reg[rd] = self.reg[rs] + self.reg[rt]
         elif(self.instuction_mem[0].split()[0]) == 'sub':
             rd = int(matches[0])
             rs = int(matches[1])
             rt = int(matches[2])
-            reg[rd] = reg[rs] - reg[rt]
+            self.reg[rd] = self.reg[rs] - self.reg[rt]
         elif(self.instuction_mem[0].split()[0]) == 'beq':
             pass
         else:
@@ -96,9 +94,9 @@ class CPU:
         if self.instuction_mem:
             matches = re.findall(r'\d+', self.instuction_mem[0])
             opcode = self.instuction_mem[0].split()[0]
-            self.IF_ID = regIns(opcode, int(matches[0]), int(matches[1]), int(matches[2]))
+            self.IF_ID = pipelineRegister(opcode, int(matches[0]), int(matches[1]), int(matches[2]))
             #self.IF_ID = self.instuction_mem[0]
-            #self.calculate()
+            self.calculate()
         
         print(f"IF stage... {self.IF_ID}")
 
@@ -141,22 +139,3 @@ class CPU:
                 del self.instuction_mem[0]
             
             
-            
-app = CPU()
-
-def main():
-    path = './input/test1.txt'
-    f = open(path, 'r', encoding='utf-8')
-    lines = f.read().splitlines()
-    print(lines)
-    #app.readInstruction(lines)
-    # for line in lines:
-        # app.readInstruction(line)
-        # app.run()
-    app.run(lines)
-    print(reg)
-    print(mem)
-    f.close()
-
-if __name__ == "__main__":
-    main()
