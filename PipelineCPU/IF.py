@@ -14,7 +14,7 @@ class IF:
                
         else:
             self.IF_ID = None
-            
+        
         print(f"IF stage... {self.IF_ID}")
         return self.IF_ID
         
