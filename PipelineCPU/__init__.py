@@ -2,42 +2,38 @@ import re
 
 class pipelineRegister:
 
+    opcode = None
+    rd = None
+    rs = None
+    rt = None
+    index = None
+    offset = None
+    base = None
+
     def __init__(self, op, num1, num2, num3):
         if op == "lw" or op == "sw":
-            self.op = op
-            self.rd = num1
+            self.opcode = op
+            self.rt = num1
             self.offset = num2
-            self.base = num3
-
-            self.rs = None
-            self.rt = None
-            self.index = None
+            self.rs = num3
         elif op == "add" or op == "sub":
-            self.op = op
+            self.opcode = op
             self.rd = num1
             self.rs = num2
             self.rt = num3
-
-            self.offset = None
-            self.base = None
-            self.index = None
         else:   #beq
-            self.op = op
+            self.opcode = op
             self.rs = num1
             self.rt = num2
             self.index = num3
 
-            self.offset = None
-            self.base = None
-            self.rd = None
-
     def __str__(self):
-        if self.op == "lw" or self.op == "sw":
-            return f"{self.op} ${self.rd}, {self.offset}(${self.base})"
-        elif self.op == "add" or self.op == "sub":
-            return f"{self.op} ${self.rd}, ${self.rs}, ${self.rt}"
-        elif self.op == "beq":
-            return f"{self.op} ${self.rs}, ${self.rt}, ${self.index}"
+        if self.opcode == "lw" or self.opcode == "sw":
+            return f"{self.opcode} ${self.rt}, {self.offset}(${self.rs})"
+        elif self.opcode == "add" or self.opcode == "sub":
+            return f"{self.opcode} ${self.rd}, ${self.rs}, ${self.rt}"
+        elif self.opcode == "beq":
+            return f"{self.opcode} ${self.rs}, ${self.rt}, ${self.index}"
         else:
             return "invalid instruction"   
 
@@ -62,7 +58,7 @@ class CPU:
     
     def calculate(self):    #do what opcode want (should write in exe?，get more info from stage and calculate)
 
-        matches = re.findall(r'\d+', self.instuction_mem[0])    #split num out (no need)
+        matches = re.findall(r'\d+', self.instuction_mem[0])    #split num out (no need) #這邊要改ID_EX
 
         if(self.instuction_mem[0].split()[0]) == 'lw':
             rd = int(matches[0])
@@ -93,10 +89,13 @@ class CPU:
     def IF(self):
         if self.instuction_mem:
             matches = re.findall(r'\d+', self.instuction_mem[0])
+            print(matches)
             opcode = self.instuction_mem[0].split()[0]
             self.IF_ID = pipelineRegister(opcode, int(matches[0]), int(matches[1]), int(matches[2]))
+            print(self.IF_ID.opcode)
+            print(self.IF_ID.rs)
             #self.IF_ID = self.instuction_mem[0]
-            self.calculate()
+            
         
         print(f"IF stage... {self.IF_ID}")
 
@@ -108,6 +107,7 @@ class CPU:
 
     def EX(self):
         if self.ID_EX:
+            self.calculate()
             self.EX_MEM = self.ID_EX
             self.ID_EX = None
         print(f"EX stage... {self.EX_MEM}")
