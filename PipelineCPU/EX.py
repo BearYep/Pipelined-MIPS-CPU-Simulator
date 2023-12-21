@@ -29,12 +29,19 @@ class EX:
             rt = int(matches[2])
             self.reg[rd] = self.reg[rs] - self.reg[rt]
         elif(self.instructionMemory[0].split()[0]) == 'beq':
-            pass
+            rs = int(matches[0])
+            rt = int(matches[1])
+            offset = int(matches[2])
+            if self.reg[rs] == self.reg[rt]:
+                pass
+            else:
+                pass
         else:
             print("error")
             return
         
     def run(self, ID_EX):
+
         if ID_EX:
             # self.calculate()
             self.EX_MEM = ID_EX
