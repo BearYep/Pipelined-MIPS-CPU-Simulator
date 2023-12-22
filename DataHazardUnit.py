@@ -13,15 +13,21 @@ class Data_Hazard:
     
     def forwarding(ID_EX, EX_MEM, MEM_WB):
         # EX hazard
-        if EX_MEM and EX_MEM.opcode in ["add", "sub", "lw", "sw"]:
-            if ID_EX.RegisterRs == EX_MEM.RegisterRd:
-                ID_EX.RegisterRs_value = EX_MEM.ALU_result
-            if ID_EX.RegisterRt == EX_MEM.RegisterRd:
-                ID_EX.RegisterRt_value = EX_MEM.ALU_result
+        if EX_MEM.RegWrite and (EX_MEM.RegisterRd != 0) and (EX_MEM.RegisterRd == ID_EX.RegisterRs):
+            # Forward to rs
+            ID_EX.RegisterRs_value = EX_MEM.ALU_result
+
+        if EX_MEM.RegWrite and (EX_MEM.RegisterRd != 0) and (EX_MEM.RegisterRd == ID_EX.RegisterRt):
+            # Forward to rt
+            ID_EX.RegisterRt_value = EX_MEM.ALU_result
 
         # MEM hazard
-        elif MEM_WB and MEM_WB.opcode in ["add", "sub", "lw", "sw"]:
-            if  ID_EX.RegisterRs == MEM_WB.RegisterRd:
-                ID_EX.RegisterRs_value = MEM_WB.MEM_result
-            if ID_EX.RegisterRt == MEM_WB.RegisterRd:
-                ID_EX.RegisterRt_value = MEM_WB.MEM_result
+        if MEM_WB.RegWrite and (MEM_WB.RegisterRd != 0) and not (EX_MEM.RegWrite and (EX_MEM.RegisterRd != 0)
+            and (EX_MEM.RegisterRd == ID_EX.RegisterRs)) and (MEM_WB.RegisterRd == ID_EX.RegisterRs):
+            # Forward to rs
+            ID_EX.RegisterRs_value = MEM_WB.MEM_result
+
+        if MEM_WB.RegWrite and (MEM_WB.RegisterRd != 0) and not (EX_MEM.RegWrite and (EX_MEM.RegisterRd != 0)
+            and (EX_MEM.RegisterRd == ID_EX.RegisterRt)) and (MEM_WB.RegisterRd == ID_EX.RegisterRt):
+            # Forward to rt
+            ID_EX.RegisterRt_value = MEM_WB.MEM_result
