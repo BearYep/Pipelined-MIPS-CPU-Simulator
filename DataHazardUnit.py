@@ -28,4 +28,4 @@ class Data_Hazard:
         return not (ID_EX.RegisterRs_value or ID_EX.RegisterRt_value)
 
     def NOP(self):
-        pass
+        self.ID_EX = 0
