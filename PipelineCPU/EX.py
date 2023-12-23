@@ -38,10 +38,21 @@ class EX:
         if ID_EX:
             # self.calculate()
             self.EX_MEM = ID_EX
+
+            if ID_EX.opcode == 'lw': 
+                ID_EX.signal = '01 010 11'
+            elif ID_EX.opcode == 'sw': 
+                ID_EX.signal = 'X1 001 0X'
+            elif ID_EX.opcode == 'add' or ID_EX.opcode == 'sub': 
+                ID_EX.signal = '10 000 10'
+            elif ID_EX.opcode == 'beq': 
+                ID_EX.signal = 'X0 100 0X'
+            print(f"EX stage... {self.EX_MEM} {ID_EX.signal}")
         else:
             self.EX_MEM = None
+            print(f"EX stage... {self.EX_MEM}")
 
-        print(f"EX stage... {self.EX_MEM}")
+        #print(f"EX stage... {self.EX_MEM}")
         return self.EX_MEM
     
         

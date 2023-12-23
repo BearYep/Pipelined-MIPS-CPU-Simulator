@@ -31,6 +31,7 @@ class CPU:
         self.cycle = 0
         while self.instructionMemory or self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB:
             self.cycle = self.cycle + 1
+
             print(f'Cycle {self.cycle}')
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB)
