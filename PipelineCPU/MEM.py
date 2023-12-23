@@ -14,7 +14,7 @@ class MEM:
                 EX_MEM.signal = '000 10'
             elif EX_MEM.opcode == 'beq': 
                 EX_MEM.signal = '100 0X'
-            print(f"MEM stage... {self.MEM_WB} {EX_MEM.signal}")
+            print(f"MEM stage... {self.MEM_WB} {self.MEM_WB.signal}")
         else:
             self.MEM_WB = None
             print(f"MEM stage... {self.MEM_WB}")

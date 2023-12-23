@@ -1,41 +1,30 @@
 import re
 
 class EX:
-    def __init__(self):
-        pass
+    def __init__(self, mem, reg):
+        self.mem = mem
+        self.reg = reg
 
-    def calculate(self):    #do what opcode want (should write in exe?，get more info from stage and calculate)
+    def calculate(self, ID_EX):    #do what opcode want (should write in exe?，get more info from stage and calculate)
 
-        matches = re.findall(r'\d+', self.instructionMemory[0])    #split num out (no need) #這邊要改ID_EX
+        if ID_EX.opcode == 'lw':
+            self.reg[ID_EX.rd] = self.mem[int((ID_EX.offset/4)) + ID_EX.base]
 
-        if(self.instructionMemory[0].split()[0]) == 'lw':
-            rd = int(matches[0])
-            offset = int(matches[1])
-            base = int(matches[2])
-            self.reg[rd] = self.mem[int((offset/4)) + base]
-        elif(self.instructionMemory[0].split()[0]) == 'sw':
-            rd = int(matches[0])
-            offset = int(matches[1])
-            base = int(matches[2])
-            self.mem[int((offset/4)) + base] = self.reg[rd]
-        elif(self.instructionMemory[0].split()[0]) == 'add':
-            rd = int(matches[0])
-            rs = int(matches[1])
-            rt = int(matches[2])
-            self.reg[rd] = self.reg[rs] + self.reg[rt]
-        elif(self.instructionMemory[0].split()[0]) == 'sub':
-            rd = int(matches[0])
-            rs = int(matches[1])
-            rt = int(matches[2])
-            self.reg[rd] = self.reg[rs] - self.reg[rt]
-        elif(self.instructionMemory[0].split()[0]) == 'beq':
-            rs = int(matches[0])
-            rt = int(matches[1])
-            offset = int(matches[2])
-            if self.reg[rs] == self.reg[rt]:
+        elif ID_EX.opcode == 'sw':
+            self.mem[int((ID_EX.offset/4)) + ID_EX.base] = self.reg[ID_EX.rd]
+
+        elif ID_EX.opcode == 'add':
+            self.reg[ID_EX.rd] = self.reg[ID_EX.rs] + self.reg[ID_EX.rt]
+            
+        elif ID_EX.opcode == 'sub':
+            self.reg[ID_EX.rd] = self.reg[ID_EX.rs] - self.reg[ID_EX.rt]
+
+        elif ID_EX.opcode == 'beq':
+            if self.reg[ID_EX.rs] == self.reg[ID_EX.rt]:
                 pass
             else:
                 pass
+
         else:
             print("error")
             return
@@ -43,23 +32,15 @@ class EX:
     def run(self, ID_EX):
 
         if ID_EX:
-            # self.calculate()
+            self.calculate(ID_EX)
             self.EX_MEM = ID_EX
 
-            if ID_EX.opcode == 'lw': 
-                ID_EX.signal = '01 010 11'
-            elif ID_EX.opcode == 'sw': 
-                ID_EX.signal = 'X1 001 0X'
-            elif ID_EX.opcode == 'add' or ID_EX.opcode == 'sub': 
-                ID_EX.signal = '10 000 10'
-            elif ID_EX.opcode == 'beq': 
-                ID_EX.signal = 'X0 100 0X'
-            print(f"EX stage... {self.EX_MEM} {ID_EX.signal}")
+            print(f"EX stage... {self.EX_MEM} {self.EX_MEM.signal}")
         else:
             self.EX_MEM = None
             print(f"EX stage... {self.EX_MEM}")
 
-        #print(f"EX stage... {self.EX_MEM}")
+        print(f"EX stage... {self.EX_MEM}")
         return self.EX_MEM
     
         

@@ -3,6 +3,7 @@ from PipelineCPU.ID import ID
 from PipelineCPU.EX import EX
 from PipelineCPU.MEM import MEM
 from PipelineCPU.WB import WB
+# from DataHazardUnit import Data_Hazard
 
 
 class CPU:
@@ -19,11 +20,12 @@ class CPU:
 
         self.IF = IF()
         self.ID = ID()
-        self.EX = EX()
+        self.EX = EX(self.mem, self.reg)
         self.MEM = MEM()
         self.WB = WB()
 
         self.instructionMemory = list()
+        # self.data_hazard_unit = Data_Hazard()
         
 
     def run(self, ins):
@@ -37,6 +39,7 @@ class CPU:
             self.WB.run(self.MEM_WB)
             self.MEM_WB = self.MEM.run(self.EX_MEM)
             self.EX_MEM = self.EX.run(self.ID_EX)
+            # self.data_hazard_unit.detection(self.ID_EX, self.EX_MEM, self.MEM_WB)
             self.ID_EX = self.ID.run(self.IF_ID)
             self.IF_ID = self.IF.run(self.instructionMemory)
             if self.instructionMemory:
