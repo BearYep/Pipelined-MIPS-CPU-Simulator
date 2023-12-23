@@ -7,6 +7,7 @@ class pipelineRegister:
     index = None
     offset = None
     base = None
+    signal = None
 
     def __init__(self, op, num1, num2, num3):
         if op == "lw" or op == "sw":
