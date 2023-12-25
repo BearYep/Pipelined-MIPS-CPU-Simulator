@@ -19,5 +19,4 @@ class MEM:
             self.MEM_WB = None
             print(f"MEM stage... {self.MEM_WB}")
 
-        #print(f"MEM stage... {self.MEM_WB}")
         return self.MEM_WB
