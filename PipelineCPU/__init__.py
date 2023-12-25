@@ -12,6 +12,9 @@ class CPU:
         self.reg = [1] * 32 #length = 32 , per length 1 words
         self.reg[0] = 0
         self.mem = [1] * 32 #length = 32 , per length 1 words
+        self.temp_reg = [1] * 32 
+        self.temp_reg[0] = 0
+        self.temp_mem = [1] * 32 
         self.pc = 0
 
         self.IF_ID = None
@@ -44,8 +47,8 @@ class CPU:
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB)
             self.MEM_WB = self.MEM.run(self.EX_MEM)
-            self.EX_MEM = self.EX.run(self.ID_EX, self.mem, self.reg, self.instructionMemory)
-            self.ID_EX = self.ID.run(self.IF_ID)
+            self.EX_MEM = self.EX.run(self.ID_EX, self.temp_mem, self.temp_reg, self.mem, self.reg, self.instructionMemory)
+            self.ID_EX = self.ID.run(self.IF_ID, self.temp_mem, self.temp_reg, self.mem, self.reg)
             self.IF_ID = self.IF.run(self.instructionMemory, self.pc)
             self.pc = self.pc + 1
             # if self.instructionMemory:

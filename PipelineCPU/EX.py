@@ -4,7 +4,7 @@ class EX:
     def __init__(self):
         pass
 
-    def calculate(self, ID_EX, mem, reg, instructionMem):    
+    def calculate(self, ID_EX, temp_mem, temp_reg, mem, reg, instructionMem):    
 
         if ID_EX.opcode == 'lw':
             rs = ID_EX.rs
@@ -31,16 +31,22 @@ class EX:
             rt = ID_EX.rt
             index = ID_EX.index
             if reg[rs] == reg[rt]:
-                pass
-
+                #因為predict not taken 所以預測錯誤
+                #跳傳branch到的指令 並吃下個指令
+                #...
+                #把預測結果出來前所吃進reg和mem的資料重置到原本狀態
+                for i in range (len(reg)):
+                    reg[i] = temp_reg[i]
+                for i in range (len(mem)):
+                    mem[i] = temp_mem[i]
         else:
             print("error")
             return
         
-    def run(self, ID_EX, mem, reg, instructionMem):
+    def run(self, ID_EX, temp_mem, temp_reg, mem, reg, instructionMem):
 
         if ID_EX:
-            self.calculate(ID_EX, mem, reg, instructionMem)
+            self.calculate(ID_EX, temp_mem, temp_reg, mem, reg, instructionMem)
             self.EX_MEM = ID_EX
 
             if ID_EX.opcode == 'lw': 
