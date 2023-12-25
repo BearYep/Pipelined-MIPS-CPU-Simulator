@@ -29,32 +29,30 @@ class CPU:
         self.MEM = MEM()
         self.WB = WB()
 
-        self.instructionMemory = list()
+        self.instruction_memory: list()
         # self.data_hazard_unit = Data_Hazard()
         
 
     def run(self, ins):
-        self.instructionMemory = ins
-        self.cycle = 0
+        self.instruction_memory = ins
+        cycle = 0
 
-        do_while_flag = True
+        while True:
+            cycle = cycle + 1
+            # if self.instruction_memory:
+            #     print(len(self.instruction_memory))
 
-        while do_while_flag or self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB:
-            self.cycle = self.cycle + 1
-
-            # if self.instructionMemory:
-            #     print(len(self.instructionMemory))
-
-            print(f'Cycle {self.cycle}')
+            print(f'Cycle {cycle}')
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB)
             self.MEM_WB = self.MEM.run(self.EX_MEM)
-            self.EX_MEM = self.EX.run(self.ID_EX, self.temp_mem, self.temp_reg, self.mem, self.reg, self.instructionMemory)
+            self.EX_MEM = self.EX.run(self.ID_EX, self.temp_mem, self.temp_reg, self.mem, self.reg, self.instruction_memory)
             self.ID_EX = self.ID.run(self.IF_ID, self.temp_mem, self.temp_reg, self.mem, self.reg)
-            self.IF_ID = self.IF.run(self.instructionMemory, self.pc)
+            self.IF_ID = self.IF.run(self.instruction_memory, self.pc)
             self.pc = self.pc + 1
-            # if self.instructionMemory:
-            #     del self.instructionMemory[0]
-            do_while_flag = False
+            # if self.instruction_memory:
+            #     del self.instruction_memory[0]
+            if not(self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB):
+                break
 
         

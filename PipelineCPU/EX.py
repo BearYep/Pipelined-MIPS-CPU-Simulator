@@ -1,22 +1,21 @@
 import re
 
 class EX:
-    def __init__(self, mem, reg):
-        self.mem = mem
-        self.reg = reg
+    def __init__(self):
+        pass
 
     def calculate(self, ID_EX, temp_mem, temp_reg, mem, reg, instructionMem):    
 
         if ID_EX.opcode == 'lw':
-            rs = ID_EX.rs
+            rt = ID_EX.rt
             offset = ID_EX.offset
-            base = ID_EX.base
-            reg[rs] = mem[int((offset/4)) + base]
+            rs = ID_EX.rs
+            reg[rt] = mem[int((offset/4)) + rs]
         elif ID_EX.opcode == 'sw':
-            rs = ID_EX.rs
+            rt = ID_EX.rt
             offset = ID_EX.offset
-            base = ID_EX.base
-            mem[int((offset/4)) + base] = reg[rs]
+            rs = ID_EX.rs
+            mem[int((offset/4)) + rs] = reg[rt]
         elif ID_EX.opcode == 'add':
             rd = ID_EX.rd
             rs = ID_EX.rs
@@ -55,7 +54,6 @@ class EX:
             self.EX_MEM = None
             print(f"EX stage... {self.EX_MEM}")
 
-        print(f"EX stage... {self.EX_MEM}")
         return self.EX_MEM
     
         
