@@ -1,5 +1,3 @@
-import re
-
 class ID:
     def __init__(self):
         pass
@@ -16,40 +14,11 @@ class ID:
     
     def decode(self, IF_ID):
 
-        #matches = re.findall(r'\d+', self.instructionMemory)
-        matches = re.findall(r'\d+', str(IF_ID))
-        opcode = IF_ID.opcode
+        if IF_ID.opcode == 'lw': IF_ID.setSignal('0101011')
+        elif IF_ID.opcode == 'sw': IF_ID.setSignal('X10010X')
+        elif IF_ID.opcode == 'add': IF_ID.setSignal('1000010')
+        elif IF_ID.opcode == 'sub': IF_ID.setSignal('1000010')
+        elif IF_ID.opcode == 'beq': IF_ID.setSignal('X01000X')
+        else: print("error")
 
-        if opcode == 'lw':
-            IF_ID.rd = int(matches[0])
-            IF_ID.offset = int(matches[1])
-            IF_ID.base = int(matches[2])
-            IF_ID.signal = '01 010 11'
-
-        elif opcode == 'sw':
-            IF_ID.rd = int(matches[0])
-            IF_ID.offset = int(matches[1])
-            IF_ID.base = int(matches[2])
-            IF_ID.signal = 'X1 001 0X'
-
-        elif opcode == 'add':
-            IF_ID.rd = int(matches[0])
-            IF_ID.rs = int(matches[1])
-            IF_ID.rt = int(matches[2])
-            IF_ID.signal = '10 000 10'
-
-        elif opcode == 'sub':
-            IF_ID.rd = int(matches[0])
-            IF_ID.rs = int(matches[1])
-            IF_ID.rt = int(matches[2])
-            IF_ID.signal = '10 000 10'
-
-        elif opcode == 'beq':
-            IF_ID.rs = int(matches[0])
-            IF_ID.rt = int(matches[1])
-            IF_ID.offset = int(matches[2])
-            IF_ID.signal = 'X0 100 0X'
-
-        else:
-            print("error")
-            return
+        # print(IF_ID.signal)

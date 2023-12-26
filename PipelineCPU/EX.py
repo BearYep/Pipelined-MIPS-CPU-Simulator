@@ -1,47 +1,46 @@
-import re
-
 class EX:
-    def __init__(self, mem, reg):
-        self.mem = mem
-        self.reg = reg
+    def __init__(self):
+        self.branch_flag = False
+        self.update_PC = None
+        
+    def calculate(self, ID_EX, pc, reg, instructionMem):    
 
-    def calculate(self, ID_EX):    #do what opcode want (should write in exe?，get more info from stage and calculate)
-
-        if ID_EX.opcode == 'lw':
-            self.reg[ID_EX.rd] = self.mem[int((ID_EX.offset/4)) + ID_EX.base]
-
-        elif ID_EX.opcode == 'sw':
-            self.mem[int((ID_EX.offset/4)) + ID_EX.base] = self.reg[ID_EX.rd]
-
-        elif ID_EX.opcode == 'add':
-            self.reg[ID_EX.rd] = self.reg[ID_EX.rs] + self.reg[ID_EX.rt]
-            
+        if ID_EX.opcode == 'add':
+            rs = ID_EX.rs
+            rt = ID_EX.rt
+            calculate_result = reg[rs] + reg[rt]
+            return calculate_result
         elif ID_EX.opcode == 'sub':
-            self.reg[ID_EX.rd] = self.reg[ID_EX.rs] - self.reg[ID_EX.rt]
-
+            rs = ID_EX.rs
+            rt = ID_EX.rt
+            calculate_result = reg[rs] - reg[rt]
+            return calculate_result
         elif ID_EX.opcode == 'beq':
-            if self.reg[ID_EX.rs] == self.reg[ID_EX.rt]:
-                pass
-            else:
-                pass
-
+            rs = ID_EX.rs
+            rt = ID_EX.rt
+            index = ID_EX.index
+            if reg[rs] == reg[rt]:
+                #因為predict not taken 所以預測錯誤
+                self.branch_flag = True         #告知CPU判斷要換PC
+                self.update_PC = instructionMem.index(str(ID_EX)) + index + 1  #先將PC存起來
+            return None
+                
         else:
-            print("error")
+            pass
             return
         
-    def run(self, ID_EX):
+    def run(self, ID_EX, pc, reg, instructionMem):
+        self.branch_flag = False
+        self.update_PC = None
 
         if ID_EX:
-            self.calculate(ID_EX)
+            calculate_result = self.calculate(ID_EX, pc, reg, instructionMem)
             self.EX_MEM = ID_EX
+            self.EX_MEM.result = calculate_result
 
-            print(f"EX stage... {self.EX_MEM} {self.EX_MEM.signal}")
+            print(f"EX stage... {self.EX_MEM} {self.EX_MEM.getSignal('EX')}")
         else:
             self.EX_MEM = None
             print(f"EX stage... {self.EX_MEM}")
 
-        print(f"EX stage... {self.EX_MEM}")
         return self.EX_MEM
-    
-        
-
