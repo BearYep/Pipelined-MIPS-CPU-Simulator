@@ -7,18 +7,21 @@ class pipelineRegister:
     index = None
     offset = None
     signal = None
+    result = None
 
     def __init__(self, op, num1, num2, num3):
         if op == "lw" or op == "sw":
             self.opcode = op
             self.rt = num1
             self.offset = num2
-            self.rs = num3  #base
+            self.rs = num3  
+            self.result = None
         elif op == "add" or op == "sub":
             self.opcode = op
             self.rd = num1
             self.rs = num2
             self.rt = num3
+            self.result = None
         else:   #beq
             self.opcode = op
             self.rs = num1

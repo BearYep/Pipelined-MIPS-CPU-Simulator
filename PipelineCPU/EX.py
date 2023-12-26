@@ -8,26 +8,16 @@ class EX:
 
     def calculate(self, ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem):    
 
-        if ID_EX.opcode == 'lw':
-            rt = ID_EX.rt
-            offset = ID_EX.offset
-            rs = ID_EX.rs
-            reg[rt] = mem[int((offset/4)) + rs]
-        elif ID_EX.opcode == 'sw':
-            rt = ID_EX.rt
-            offset = ID_EX.offset
-            rs = ID_EX.rs
-            mem[int((offset/4)) + rs] = reg[rt]
-        elif ID_EX.opcode == 'add':
+        if ID_EX.opcode == 'add':
             rd = ID_EX.rd
             rs = ID_EX.rs
             rt = ID_EX.rt
-            reg[rd] = reg[rs] + reg[rt]
+            ID_EX.result = reg[rs] + reg[rt]
         elif ID_EX.opcode == 'sub':
             rd = ID_EX.rd
             rs = ID_EX.rs
             rt = ID_EX.rt
-            reg[rd] = reg[rs] - reg[rt]
+            ID_EX.result = reg[rs] - reg[rt]
         elif ID_EX.opcode == 'beq':
             rs = ID_EX.rs
             rt = ID_EX.rt
