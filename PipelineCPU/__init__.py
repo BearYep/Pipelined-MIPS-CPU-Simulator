@@ -25,7 +25,7 @@ class CPU:
 
         self.IF = IF()
         self.ID = ID()
-        self.EX = EX(self.mem, self.reg)
+        self.EX = EX()
         self.MEM = MEM()
         self.WB = WB()
 
