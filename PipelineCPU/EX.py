@@ -2,18 +2,18 @@ class EX:
     def __init__(self):
         pass
 
-    def calculate(self, ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem):    
+    def calculate(self, ID_EX, pc, reg, instructionMem):    
 
         if ID_EX.opcode == 'add':
-            rd = ID_EX.rd
             rs = ID_EX.rs
             rt = ID_EX.rt
-            ID_EX.result = reg[rs] + reg[rt]
+            calculate_result = reg[rs] + reg[rt]
+            return calculate_result
         elif ID_EX.opcode == 'sub':
-            rd = ID_EX.rd
             rs = ID_EX.rs
             rt = ID_EX.rt
-            ID_EX.result = reg[rs] - reg[rt]
+            calculate_result = reg[rs] - reg[rt]
+            return calculate_result
         elif ID_EX.opcode == 'beq':
             rs = ID_EX.rs
             rt = ID_EX.rt
@@ -27,20 +27,16 @@ class EX:
               
                 #IF stage吃新指令 (IF run中的code?)
                 
-                #把預測結果出來前所吃進reg和mem的資料重置到原本狀態
-                for i in range (len(reg)):
-                    reg[i] = temp_reg[i]
-                for i in range (len(mem)):
-                    mem[i] = temp_mem[i]
         else:
-            print("EX error OR do not calculate")
+            pass
             return
         
-    def run(self, ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem):
+    def run(self, ID_EX, pc, reg, instructionMem):
 
         if ID_EX:
-            self.calculate(ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem)
+            calculate_result = self.calculate(ID_EX, pc, reg, instructionMem)
             self.EX_MEM = ID_EX
+            self.EX_MEM.result = calculate_result
 
             print(f"EX stage... {self.EX_MEM} {self.EX_MEM.getSignal('EX')}")
         else:
