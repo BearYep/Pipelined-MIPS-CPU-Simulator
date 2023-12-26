@@ -21,4 +21,4 @@ class ID:
         elif IF_ID.opcode == 'beq': IF_ID.setSignal('X01000X')
         else: print("error")
 
-        print(IF_ID.signal)
+        # print(IF_ID.signal)

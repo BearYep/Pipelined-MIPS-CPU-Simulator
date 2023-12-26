@@ -54,6 +54,6 @@ class pipelineRegister:
         elif self.opcode == "add" or self.opcode == "sub":
             return f"{self.opcode} ${self.rd}, ${self.rs}, ${self.rt}"
         elif self.opcode == "beq":
-            return f"{self.opcode} ${self.rs}, ${self.rt}, ${self.index}"
+            return f"{self.opcode} ${self.rs}, ${self.rt}, {self.index}"
         else:
             return "invalid instruction"   
