@@ -4,9 +4,8 @@ class pipelineRegister:
     rd = None
     rs = None
     rt = None
-    index = None
+    index  = None
     offset = None
-    signal = None
     result = None
 
     def __init__(self, op, num1, num2, num3):
@@ -28,6 +27,27 @@ class pipelineRegister:
             self.rt = num2
             self.index = num3
 
+    def setSignal(self, signal):
+        self.RegDst   = signal[0]
+        self.ALUSrc   = signal[1]
+        self.Branch   = signal[2]
+        self.MemRead  = signal[3]
+        self.MemWrite = signal[4]
+        self.RegWrite = signal[5]
+        self.MemtoReg = signal[6]
+
+    @property
+    def signal(self):
+        return (f'{self.RegDst}{self.ALUSrc} {self.Branch}{self.MemRead}{self.MemWrite} {self.RegWrite}{self.MemtoReg}')
+    
+    def getSignal(self, Stage):
+        if Stage == 'EX':
+            return (f'{self.RegDst}{self.ALUSrc} {self.Branch}{self.MemRead}{self.MemWrite} {self.RegWrite}{self.MemtoReg}')
+        elif Stage == 'MEM':
+            return (f'{self.Branch}{self.MemRead}{self.MemWrite} {self.RegWrite}{self.MemtoReg}')
+        elif Stage == 'WB':
+            return (f'{self.RegWrite}{self.MemtoReg}')
+    
     def __str__(self):
         if self.opcode == "lw" or self.opcode == "sw":
             return f"{self.opcode} ${self.rt}, {self.offset}(${self.rs})"

@@ -11,11 +11,6 @@ class WB:
             elif MEM_WB.opcode == 'add' or MEM_WB.opcode == 'sub':
                 reg[MEM_WB.rd] = MEM_WB.result
 
-            if MEM_WB.opcode == 'lw': MEM_WB.signal = '11'
-            elif MEM_WB.opcode == 'sw': MEM_WB.signal = '0X'
-            elif MEM_WB.opcode == 'add' or MEM_WB == 'sub': MEM_WB.signal = '10'
-            elif MEM_WB.opcode == 'beq': MEM_WB.signal = '0X'
-
-            print(f"WB stage... {MEM_WB} {MEM_WB.signal}")
+            print(f"WB stage... {MEM_WB} {MEM_WB.getSignal('WB')}")
         else:
             print("WB stage... None")

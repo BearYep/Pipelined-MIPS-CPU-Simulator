@@ -54,5 +54,4 @@ class CPU:
             #     del self.instruction_memory[0]
             if not(self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB):
                 break
-
         

@@ -1,5 +1,3 @@
-import re
-
 class ID:
     def __init__(self):
         pass
@@ -21,10 +19,11 @@ class ID:
     
     def decode(self, IF_ID):
 
-        if IF_ID.opcode == 'lw': IF_ID.signal = '01 010 11'
-        elif IF_ID.opcode == 'sw': IF_ID.signal = 'X1 001 0X'
-        elif IF_ID.opcode == 'add': IF_ID.signal = '10 000 10'
-        elif IF_ID.opcode == 'sub': IF_ID.signal = '10 000 10'
-        elif IF_ID.opcode == 'beq': IF_ID.signal = 'X0 100 0X'
-
+        if IF_ID.opcode == 'lw': IF_ID.setSignal('0101011')
+        elif IF_ID.opcode == 'sw': IF_ID.setSignal('X10010X')
+        elif IF_ID.opcode == 'add': IF_ID.setSignal('1000010')
+        elif IF_ID.opcode == 'sub': IF_ID.setSignal('1000010')
+        elif IF_ID.opcode == 'beq': IF_ID.setSignal('X01000X')
         else: print("error")
+
+        print(IF_ID.signal)
