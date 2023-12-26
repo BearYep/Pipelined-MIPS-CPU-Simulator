@@ -35,8 +35,6 @@ class CPU:
         cycle = 0
         
         while True:
-            branch_flag = False
-
             cycle += 1
             # if self.instruction_memory:
             #     print(len(self.instruction_memory))
@@ -45,11 +43,11 @@ class CPU:
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB, self.mem, self.reg)
             self.MEM_WB = self.MEM.run(self.EX_MEM, self.mem, self.reg)
-            self.EX_MEM , branch_flag = self.EX.run(self.ID_EX, self.pc, self.reg, self.instruction_memory)
+            self.EX_MEM = self.EX.run(self.ID_EX, self.pc, self.reg, self.instruction_memory)
             
             #EX有沒有做事 AND 做完(beq)之後有沒有預測有沒有錯 =True=> pass ID、改新PC
-            if(self.EX_MEM and branch_flag):
-                self.pc = self.EX.getUpdatePC()
+            if(self.EX_MEM and self.EX.branch_flag):
+                self.pc = self.EX.update_PC
                 self.ID_EX = None
             else:
                 self.ID_EX = self.ID.run(self.IF_ID)

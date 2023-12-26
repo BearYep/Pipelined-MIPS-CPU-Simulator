@@ -1,7 +1,8 @@
 class EX:
     def __init__(self):
+        self.branch_flag = False
         self.update_PC = None
-
+        
     def calculate(self, ID_EX, pc, reg, instructionMem):    
 
         if ID_EX.opcode == 'add':
@@ -42,9 +43,4 @@ class EX:
             self.EX_MEM = None
             print(f"EX stage... {self.EX_MEM}")
 
-        return self.EX_MEM, self.branch_flag
-    
-    def getUpdatePC(self):
-        return self.update_PC
-        
-
+        return self.EX_MEM
