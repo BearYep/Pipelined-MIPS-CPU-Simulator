@@ -46,7 +46,7 @@ class CPU:
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB)
             self.MEM_WB = self.MEM.run(self.EX_MEM)
-            self.EX_MEM = self.EX.run(self.ID_EX, self.temp_mem, self.temp_reg, self.mem, self.reg, self.instruction_memory)
+            self.EX_MEM = self.EX.run(self.ID_EX, self.pc, self.IF_ID, self.temp_mem, self.temp_reg, self.mem, self.reg, self.instruction_memory)
             self.ID_EX = self.ID.run(self.IF_ID, self.temp_mem, self.temp_reg, self.mem, self.reg)
             self.IF_ID = self.IF.run(self.instruction_memory, self.pc)
             self.pc = self.pc + 1

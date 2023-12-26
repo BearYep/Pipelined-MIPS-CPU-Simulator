@@ -1,10 +1,12 @@
 import re
+from PipelineCPU.pipelineReg import pipelineRegister
+
 
 class EX:
     def __init__(self):
         pass
 
-    def calculate(self, ID_EX, temp_mem, temp_reg, mem, reg, instructionMem):    
+    def calculate(self, ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem):    
 
         if ID_EX.opcode == 'lw':
             rt = ID_EX.rt
@@ -32,8 +34,13 @@ class EX:
             index = ID_EX.index
             if reg[rs] == reg[rt]:
                 #因為predict not taken 所以預測錯誤
-                #跳傳branch到的指令 並吃下個指令
-                #...
+
+                #放空指令..
+                #IF_ID = None
+                pc = instructionMem.index(ID_EX) + index + 1
+
+                #IF stage吃新指令 (IF run中的code?)
+                
                 #把預測結果出來前所吃進reg和mem的資料重置到原本狀態
                 for i in range (len(reg)):
                     reg[i] = temp_reg[i]
@@ -43,10 +50,10 @@ class EX:
             print("error")
             return
         
-    def run(self, ID_EX, temp_mem, temp_reg, mem, reg, instructionMem):
+    def run(self, ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem):
 
         if ID_EX:
-            self.calculate(ID_EX, temp_mem, temp_reg, mem, reg, instructionMem)
+            self.calculate(ID_EX, pc, IF_ID, temp_mem, temp_reg, mem, reg, instructionMem)
             self.EX_MEM = ID_EX
 
             print(f"EX stage... {self.EX_MEM} {self.EX_MEM.signal}")
