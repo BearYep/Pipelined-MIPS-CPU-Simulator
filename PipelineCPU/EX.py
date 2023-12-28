@@ -34,7 +34,7 @@ class EX:
             rs = ID_EX.rs
             rt = ID_EX.rt
             index = ID_EX.index
-            if reg[rs] == reg[rt]:
+            if result_rs == result_rt:
                 #因為predict not taken 所以預測錯誤
                 self.branch_flag = True         #告知CPU判斷要換PC
                 self.update_PC = instructionMem.index(str(ID_EX)) + index + 1  #先將PC存起來

@@ -28,13 +28,13 @@ class pipelineRegister:
             self.index = num3
 
     def setSignal(self, signal):
-        self.RegDst   = signal[0]
-        self.ALUSrc   = signal[1]
-        self.Branch   = signal[2]
-        self.MemRead  = signal[3]
-        self.MemWrite = signal[4]
-        self.RegWrite = signal[5]
-        self.MemtoReg = signal[6]
+        self.RegDst   = int(signal[0]) if signal[0] != 'X' else 'X'
+        self.ALUSrc   = int(signal[1])
+        self.Branch   = int(signal[2])
+        self.MemRead  = int(signal[3])
+        self.MemWrite = int(signal[4])
+        self.RegWrite = int(signal[5])
+        self.MemtoReg = int(signal[6]) if signal[6] != 'X' else 'X'
 
     @property
     def signal(self):
