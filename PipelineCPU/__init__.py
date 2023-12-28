@@ -3,6 +3,7 @@ from PipelineCPU.ID import ID
 from PipelineCPU.EX import EX
 from PipelineCPU.MEM import MEM
 from PipelineCPU.WB import WB
+import DataHazardUnit
 
 
 class CPU:
@@ -44,7 +45,8 @@ class CPU:
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB, self.mem, self.reg)
             self.MEM_WB = self.MEM.run(self.EX_MEM, self.mem, self.reg)
-            self.EX_MEM = self.EX.run(self.ID_EX, self.pc, self.reg, self.instruction_memory)
+
+            self.EX_MEM = self.EX.run(self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
             
             #EX有沒有做事 AND 做完(beq)之後有沒有預測有沒有錯 =True=> pass ID、改新PC
             if(self.EX_MEM and self.EX.branch_flag):
@@ -53,8 +55,7 @@ class CPU:
             else:
                 self.ID_EX = self.ID.run(self.IF_ID, self.ID_EX)
 
-            if (self.MEM_WB is not None) and (self.EX_MEM is not None) and ((self.ID_EX is not None)):
-                self.forwarding()
+            
 
             self.IF_ID  = self.IF.run(self.instruction_memory, self.pc)
             self.pc += 1
@@ -62,27 +63,3 @@ class CPU:
             #     del self.instruction_memory[0]
             if not(self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB):
                 break
-
-    def forwarding(self):
-        # EX hazard
-        if (self.EX_MEM is not None) and self.EX_MEM.RegWrite and (self.EX_MEM.rd == self.ID_EX.rs):
-            # Forward to rs
-            self.ID_EX = self.EX_MEM
-
-        if (self.EX_MEM is not None) and self.EX_MEM.RegWrite and (self.EX_MEM.rs == self.ID_EX.rt):
-            # Forward to rt
-            self.ID_EX = self.EX_MEM
-
-        # MEM hazard
-        if (self.MEM_WB is not None) and self.MEM_WB.RegWrite and (self.MEM_WB.rd is not None) and \
-                not (self.EX_MEM is not None and self.EX_MEM.RegWrite and (self.EX_MEM.rd is not None) and
-                    (self.EX_MEM.rd == self.ID_EX.rs)) and (self.MEM_WB.rd == self.ID_EX.rs):
-            # Forward to rs
-            self.ID_EX = self.MEM_WB
-
-        if (self.MEM_WB is not None) and self.MEM_WB.RegWrite and (self.MEM_WB.rd is not None) and \
-                not (self.EX_MEM is not None and self.EX_MEM.RegWrite and (self.EX_MEM.rd is not None) and
-                    (self.EX_MEM.rd == self.ID_EX.rt)) and (self.MEM_WB.rd == self.ID_EX.rt):
-            # Forward to rt
-            self.ID_EX = self.MEM_WB
-
