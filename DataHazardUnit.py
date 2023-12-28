@@ -25,5 +25,12 @@ def forwarding(ID_EX, EX_MEM, MEM_WB):
 
     return None
 
+def load_use_hazard(IF_ID, ID_EX):
+    if IF_ID and ID_EX:
+        if ID_EX.MemRead and ((ID_EX.rt == IF_ID.rs) or (ID_EX.rt == IF_ID.rt)):
+            #Stall and insert bubble
+            return True
+            
+    return False
 def NOP():
     ID_EX = None

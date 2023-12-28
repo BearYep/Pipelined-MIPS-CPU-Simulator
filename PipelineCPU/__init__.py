@@ -35,8 +35,14 @@ class CPU:
     def run(self, ins):
         self.instruction_memory = ins
         cycle = 0
-        
+
+        stall_beq = False
+        beq_count = 0
+
         while True:
+            print(stall_beq)
+            
+            stall = False
             cycle += 1
             # if self.instruction_memory:
             #     print(len(self.instruction_memory))
@@ -46,18 +52,42 @@ class CPU:
             self.WB.run(self.MEM_WB, self.mem, self.reg)
             self.MEM_WB = self.MEM.run(self.EX_MEM, self.mem, self.reg)
 
-            self.EX_MEM = self.EX.run(self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
+            if(stall_beq):
+                print(f"EX stage... None")
+                self.EX_MEM = None
+                beq_count += 1
+            else:
+                self.EX_MEM = self.EX.run(self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
             
             #EX有沒有做事 AND 做完(beq)之後有沒有預測有沒有錯 =True=> pass ID、改新PC
             if(self.EX_MEM and self.EX.branch_flag):
                 self.pc = self.EX.update_PC
                 self.ID_EX = None
+            elif(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX) and beq_count == 0):
+                if(self.IF_ID.opcode == 'beq'):
+                    #wait 2 cycle
+                    self.ID.run(self.IF_ID)
+                    stall = True
+                    stall_beq = True
+                    self.ID_EX = None
+                else:
+                    self.ID.run(self.IF_ID)
+                    stall = True
+                    self.ID_EX = None
             else:
-                self.ID_EX = self.ID.run(self.IF_ID, self.ID_EX)
+                self.ID_EX = self.ID.run(self.IF_ID)
 
-            
+           
+            if(stall or stall_beq):
+                self.IF.run(self.instruction_memory, self.pc)
+                self.pc -= 1
+            else:
+                self.IF_ID = self.IF.run(self.instruction_memory, self.pc)
 
-            self.IF_ID  = self.IF.run(self.instruction_memory, self.pc)
+            if(beq_count == 2):
+                beq_count = 0
+                stall_beq = False
+
             self.pc += 1
             # if self.instruction_memory:
             #     del self.instruction_memory[0]
