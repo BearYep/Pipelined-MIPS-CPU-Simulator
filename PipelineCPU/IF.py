@@ -3,7 +3,6 @@ from PipelineCPU.pipelineReg import pipelineRegister
 
 def divide_ins(instruction):
     parts = instruction.split(' ')
-    print(parts)
     if(parts[0] == 'lw' or parts[0] == 'sw'):
         opcode = parts[0]
 

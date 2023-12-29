@@ -4,6 +4,7 @@ from PipelineCPU.EX import EX
 from PipelineCPU.MEM import MEM
 from PipelineCPU.WB import WB
 import DataHazardUnit
+from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 
 class CPU:
@@ -41,9 +42,9 @@ class CPU:
 
         while True:
             print(stall_beq)
-            
             stall = False
             cycle += 1
+
             # if self.instruction_memory:
             #     print(len(self.instruction_memory))
 
@@ -52,37 +53,51 @@ class CPU:
             self.WB.run(self.MEM_WB, self.mem, self.reg)
             self.MEM_WB = self.MEM.run(self.EX_MEM, self.mem, self.reg)
 
-            if(stall_beq):
-                print(f"EX stage... None")
-                self.EX_MEM = None
-                beq_count += 1
-            else:
-                self.EX_MEM = self.EX.run(self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
+            self.EX_MEM = self.EX.run(self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
             
+            # print(self.EX.branch_flag)
             #EX有沒有做事 AND 做完(beq)之後有沒有預測有沒有錯 =True=> pass ID、改新PC
             if(self.EX_MEM and self.EX.branch_flag):
                 self.pc = self.EX.update_PC
-                self.ID_EX = None
-            elif(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX) and beq_count == 0):
-                if(self.IF_ID.opcode == 'beq'):
-                    #wait 2 cycle
-                    self.ID.run(self.IF_ID)
-                    stall = True
-                    stall_beq = True
-                    self.ID_EX = None
-                else:
-                    self.ID.run(self.IF_ID)
-                    stall = True
-                    self.ID_EX = None
-            else:
-                self.ID_EX = self.ID.run(self.IF_ID)
+                self.IF_ID = DataHazardUnit.NOP()
+                stall = True
+            # elif(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX) and beq_count == 0):
+            #     if(self.IF_ID.opcode == 'beq'):
+            #         #wait 2 cycle
+            #         self.ID.run(self.IF_ID, self.reg, self.instruction_memory)
+            #         stall = True
+            #         stall_beq = True
+            #         self.ID_EX = None
+            # else:
+            #     self.ID.run(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
+            #     self.ID_EX = None
+                 
+            if(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX)):
+                print("lW hazard")
+                stall = True
 
-           
+            condition = DataHazardUnit.branch_hazard(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, ForwardingUnit())
+            print(f"branch hazard:{condition}")
+            if(condition == 0b10):
+                stall = True
+            elif(condition == 0b11):
+                stall_beq = True
+            
             if(stall or stall_beq):
-                self.IF.run(self.instruction_memory, self.pc)
-                self.pc -= 1
+                self.ID.run(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
+                if(self.EX.branch_flag):
+                    self.IF_ID = self.IF.run(self.instruction_memory, self.pc)
+                else:
+                    self.IF.run(self.instruction_memory, self.pc)
+                    self.pc -= 1
+                
+                self.ID_EX = DataHazardUnit.NOP()
             else:
+                self.ID_EX = self.ID.run(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
                 self.IF_ID = self.IF.run(self.instruction_memory, self.pc)
+
+            if(stall_beq):
+                beq_count += 1
 
             if(beq_count == 2):
                 beq_count = 0
