@@ -60,7 +60,7 @@ class CPU:
             if(self.EX_MEM and self.EX.branch_flag):
                 self.pc = self.EX.update_PC
                 self.IF_ID = DataHazardUnit.NOP()
-                stall = True
+                #stall = True
             # elif(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX) and beq_count == 0):
             #     if(self.IF_ID.opcode == 'beq'):
             #         #wait 2 cycle
@@ -104,6 +104,7 @@ class CPU:
                 stall_beq = False
 
             self.pc += 1
+            print(f'pc:{self.pc}')
             # if self.instruction_memory:
             #     del self.instruction_memory[0]
             if not(self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB):

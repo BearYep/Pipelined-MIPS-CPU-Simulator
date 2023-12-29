@@ -50,8 +50,18 @@ def branch_hazard(IF_ID, ID_EX, EX_MEM, MEM_WB, forwardingUnit):
                 condition_result = 0b01
 
         if EX_MEM and ID_EX and IF_ID:
-            if((ID_EX.RegWrite and (ID_EX.rd) != 0) and ((ID_EX.rd == IF_ID.rs) or (ID_EX.rd == IF_ID.rt))) or (EX_MEM.MemRead and ((EX_MEM.rt == IF_ID.rs) or (EX_MEM.rt == IF_ID.rt))):
-                condition_result = 0b10
+                if(ID_EX.RegWrite and (ID_EX.rd) != 0):
+                    if(ID_EX.rd == IF_ID.rs):
+                        forwardingUnit.ForwardA = 0b10
+                    if(ID_EX.rd == IF_ID.rt):
+                        forwardingUnit.ForwardB = 0b10
+                    condition_result = 0b10
+                if(EX_MEM.MemRead):
+                    if(EX_MEM.rt == IF_ID.rs):
+                        forwardingUnit.ForwardA = 0b01
+                    if(EX_MEM.rt == IF_ID.rt):
+                        forwardingUnit.ForwardB = 0b01
+                    condition_result = 0b10
         
         if ID_EX and IF_ID:
             if (ID_EX.MemRead):

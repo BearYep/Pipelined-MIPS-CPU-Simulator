@@ -3,7 +3,6 @@ from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 class EX:
     def __init__(self):
-        self.forwardingUnit = ForwardingUnit()
         self.branch_flag = False
         self.update_PC = None
         
@@ -29,9 +28,7 @@ class EX:
             calculate_result = result_rs - result_rt
             return calculate_result
         elif ID_EX.opcode == 'beq':
-            rs = ID_EX.rs
-            rt = ID_EX.rt
-            index = ID_EX.index
+
             if ID_EX.result:
                 self.branch_flag = True         #告知CPU判斷要換PC
                 self.update_PC = ID_EX.result  #先將PC存起來
@@ -51,10 +48,11 @@ class EX:
         
 
         if ID_EX:
+            self.forwardingUnit = ForwardingUnit()
             calculate_result = self.calculate(ID_EX, EX_MEM, MEM_WB, reg, instructionMem, self.forwardingUnit)
+            
             self.EX_MEM = ID_EX
             self.EX_MEM.result = calculate_result
-
             print(f"EX stage... {self.EX_MEM} {self.EX_MEM.getSignal('EX')}")
         else:
             self.EX_MEM = None

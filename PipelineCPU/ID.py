@@ -45,17 +45,21 @@ class ID:
             if(forwardingUnit.ForwardB == 0b01):
                 result_rt = MEM_WB.result
         elif(condition == 0b10):
-            pass
+            if(forwardingUnit.ForwardA == 0b10):
+                result_rs = ID_EX.result
+            if(forwardingUnit.ForwardB == 0b10):
+                result_rt = ID_EX.result
+            if(forwardingUnit.ForwardA == 0b01):
+                result_rs = EX_MEM.result
+            if(forwardingUnit.ForwardB == 0b01):
+                result_rt = EX_MEM.result
         elif(condition == 0b11):
             if(forwardingUnit.ForwardA == 0b10):
                 result_rs = ID_EX.result
             if(forwardingUnit.ForwardB == 0b10):
                 result_rt = ID_EX.result
 
-        
-        if(self.stall):
-            pass
-        else:
-            if result_rs == result_rt:
-                #因為predict not taken 所以預測錯誤
-                IF_ID.result = instructionMem.index(str(IF_ID)) + IF_ID.index + 1  #先將PC存起來
+        print(result_rs,result_rt)
+        if result_rs == result_rt:
+            #因為predict not taken 所以預測錯誤
+            IF_ID.result = instructionMem.index(str(IF_ID)) + IF_ID.index + 1  #先將PC存起來

@@ -4,7 +4,7 @@ app = CPU()
 
 def main():
 
-    path = './input/test4.txt'
+    path = './input/test1.txt'
     f = open(path, 'r', encoding='utf-8')
     lines = f.read().splitlines()
     print(lines)
