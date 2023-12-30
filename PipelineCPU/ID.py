@@ -34,7 +34,6 @@ class ID:
         result_rs = reg[IF_ID.rs]
         result_rt = reg[IF_ID.rt]
         condition = DataHazardUnit.branch_hazard(IF_ID, ID_EX, EX_MEM, MEM_WB, forwardingUnit)
-        print(condition)
         if(condition == 0b01):
             if(forwardingUnit.ForwardA == 0b10):
                 result_rs = EX_MEM.result
@@ -59,7 +58,6 @@ class ID:
             if(forwardingUnit.ForwardB == 0b10):
                 result_rt = ID_EX.result
 
-        print(result_rs,result_rt)
         if result_rs == result_rt:
             #因為predict not taken 所以預測錯誤
             IF_ID.result = instructionMem.index(str(IF_ID)) + IF_ID.index + 1  #先將PC存起來

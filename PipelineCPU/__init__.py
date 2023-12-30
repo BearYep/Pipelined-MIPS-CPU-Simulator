@@ -41,7 +41,6 @@ class CPU:
         beq_count = 0
 
         while True:
-            print(stall_beq)
             stall = False
             cycle += 1
 
@@ -73,16 +72,12 @@ class CPU:
             #     self.ID_EX = None
                  
             if(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX)):
-                print("lW hazard")
                 stall = True
-
             condition = DataHazardUnit.branch_hazard(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, ForwardingUnit())
-            print(f"branch hazard:{condition}")
             if(condition == 0b10):
                 stall = True
             elif(condition == 0b11):
                 stall_beq = True
-            
             if(stall or stall_beq):
                 self.ID.run(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
                 if(self.EX.branch_flag):
@@ -104,7 +99,6 @@ class CPU:
                 stall_beq = False
 
             self.pc += 1
-            print(f'pc:{self.pc}')
             # if self.instruction_memory:
             #     del self.instruction_memory[0]
             if not(self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB):

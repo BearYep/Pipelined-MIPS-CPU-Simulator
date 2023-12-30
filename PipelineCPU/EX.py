@@ -7,7 +7,6 @@ class EX:
         self.update_PC = None
         
     def calculate(self, ID_EX, EX_MEM, MEM_WB, reg, instructionMem, forwardingUnit):    
-        print(f'rs: {ID_EX.rs} rt: {ID_EX.rt}')
         result_rs = reg[ID_EX.rs]
         result_rt = reg[ID_EX.rt]
         DataHazardUnit.detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit)
