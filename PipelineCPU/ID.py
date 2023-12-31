@@ -1,4 +1,4 @@
-import HazardUnit
+import PipelineCPU.HazardUnit as HazardUnit
 from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 class ID:
@@ -61,5 +61,4 @@ class ID:
                 result_rt = ID_EX.result
 
         if result_rs == result_rt:
-            #因為predict not taken 所以預測錯誤
-            IF_ID.result = instructionMem.index(str(IF_ID)) + IF_ID.index + 1  #先將PC存起來
+            IF_ID.result = instructionMem.index(str(IF_ID)) + IF_ID.index + 1

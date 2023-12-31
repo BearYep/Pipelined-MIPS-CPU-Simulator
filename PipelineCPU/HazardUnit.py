@@ -1,13 +1,11 @@
 def detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit):
     if EX_MEM and MEM_WB:
-        # EX hazard
         if EX_MEM.RegWrite and (EX_MEM.rd != 0) and (EX_MEM.rd == ID_EX.rs):
             forwardingUnit.ForwardA = 0b10
 
         if EX_MEM.RegWrite and (EX_MEM.rd != 0) and (EX_MEM.rd == ID_EX.rt):
             forwardingUnit.ForwardB = 0b10
 
-        # MEM hazard
         if MEM_WB.RegWrite and (MEM_WB.rd != 0) and not (EX_MEM.RegWrite and (EX_MEM.rd != 0)
             and (EX_MEM.rd == ID_EX.rs)) and (MEM_WB.rd == ID_EX.rs):
             forwardingUnit.ForwardA = 0b01
@@ -19,7 +17,6 @@ def detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit):
 def load_use_hazard(IF_ID, ID_EX):
     if IF_ID and ID_EX:
         if ID_EX.MemRead and ((ID_EX.rt == IF_ID.rs) or (ID_EX.rt == IF_ID.rt)):
-            #Stall and insert bubble
             return True
             
     return False
@@ -28,7 +25,6 @@ def branch_hazard(IF_ID, ID_EX, EX_MEM, MEM_WB, forwardingUnit):
     condition_result = 0b00
     if(IF_ID and IF_ID.opcode == 'beq'):
         if (MEM_WB and IF_ID) or (EX_MEM and IF_ID):
-            #2nd or 3rd
 
             if (MEM_WB and IF_ID):
                 if(MEM_WB.RegWrite and (MEM_WB.rd) != 0):

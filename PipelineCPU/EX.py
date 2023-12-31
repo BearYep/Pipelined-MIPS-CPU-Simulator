@@ -1,4 +1,4 @@
-import HazardUnit
+import PipelineCPU.HazardUnit as HazardUnit
 from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 class EX:
@@ -19,7 +19,6 @@ class EX:
         if(forwardingUnit.ForwardB == 0b01 and MEM_WB):
             result_rt = MEM_WB.result
         
-        #ALU
         if ID_EX.opcode == 'add':
             calculate_result = result_rs + result_rt
             return calculate_result
@@ -29,14 +28,8 @@ class EX:
         elif ID_EX.opcode == 'beq':
 
             if ID_EX.result:
-                self.branch_flag = True         #告知CPU判斷要換PC
-                self.update_PC = ID_EX.result  #先將PC存起來
-            # if result_rs == result_rt:
-            #     #因為predict not taken 所以預測錯誤
-            #     self.branch_flag = True         #告知CPU判斷要換PC
-            #     self.update_PC = instructionMem.index(str(ID_EX)) + index + 1  #先將PC存起來
-            # return None
-                
+                self.branch_flag = True 
+                self.update_PC = ID_EX.result 
         else:
             pass
             return

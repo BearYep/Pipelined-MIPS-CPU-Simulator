@@ -33,7 +33,7 @@ class IF:
         pass
     
     def run(self, instructionMem, pc):
-        if len(instructionMem) > pc: #判斷IF要不要作動
+        if len(instructionMem) > pc:
             code = divide_ins(instructionMem[pc])
             self.IF_ID = pipelineRegister(code[0], int(code[1]), int(code[2]), int(code[3]))
         else:
@@ -41,7 +41,6 @@ class IF:
         
         
         print(f"IF stage... {self.IF_ID}")
-        #print(instructionMem[pc])
         with open ('result.txt','a') as file:
             file.write(f"IF stage... {self.IF_ID}\n")
         return self.IF_ID
