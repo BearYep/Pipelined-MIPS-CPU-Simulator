@@ -12,6 +12,10 @@ class WB:
                 reg[MEM_WB.rd] = MEM_WB.result
 
             print(f"WB stage... {MEM_WB} {MEM_WB.getSignal('WB')}")
+            with open ('result.txt','a') as file:
+                file.write(f"WB stage... {MEM_WB} {MEM_WB.getSignal('WB')}")
             return MEM_WB
         else:
             print("WB stage... None")
+            with open ('result.txt','a') as file:
+                file.write("WB stage... None")

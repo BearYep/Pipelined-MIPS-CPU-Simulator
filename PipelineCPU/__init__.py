@@ -101,32 +101,11 @@ class CPU:
                 beq_count = 0
                 stall_beq = False
 
-            cycle_result = {
-                'Cycle' : cycle,
-                'WB': self.END, 
-                'Signal_in_WB': self.END.getSignal('WB') if self.END is not None else " ",
-                'MEM': self.MEM_WB, 
-                'Signal_in_MEM': self.MEM_WB.getSignal('MEM') if self.MEM_WB is not None else " ",
-                'EX': self.EX_MEM,
-                'Signal_in_EX': self.EX_MEM.getSignal('EX') if self.EX_MEM is not None else " ",
-                'ID': self.ID_EX,
-                'IF': self.IF_ID,
-            }
-            self.result.append(cycle_result)
             self.pc += 1
             # if self.instruction_memory:
             #     del self.instruction_memory[0]
             if not(self.IF_ID or self.ID_EX or self.EX_MEM or self.MEM_WB):
-                with open ('result.txt', 'w') as file:
-                    for result in self.result:
-                        file.write(f'Cycle {result["Cycle"]}:\n')
-                        file.write(f'WB: {result["WB"]}  {result["Signal_in_WB"]}\n')
-                        file.write(f'MEM: {result["MEM"]}  {result["Signal_in_MEM"]}\n')
-                        file.write(f'EX: {result["EX"]}  {result["Signal_in_EX"]}\n')
-                        file.write(f'ID: {result["ID"]}\n')
-                        file.write(f'IF: {result["IF"]}\n')
-                        file.write('\n') 
-
+                with open ('result.txt', 'a') as file: 
                     file.write('Final Registers: {}\n'.format(self.reg))
                     file.write('Final Memory: {}\n'.format(self.mem))
                     file.write(f'Need {self.pc} cycles')

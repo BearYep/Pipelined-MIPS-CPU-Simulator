@@ -53,8 +53,12 @@ class EX:
             self.EX_MEM = ID_EX
             self.EX_MEM.result = calculate_result
             print(f"EX stage... {self.EX_MEM} {self.EX_MEM.getSignal('EX')}")
+            with open('result.txt' ,'a') as file:
+                file.write(f"EX stage... {self.EX_MEM} {self.EX_MEM.getSignal('EX')}")
         else:
             self.EX_MEM = None
             print(f"EX stage... {self.EX_MEM}")
+            with open('result.txt' ,'a') as file:
+                file.write(f"EX stage... {self.EX_MEM}")
 
         return self.EX_MEM

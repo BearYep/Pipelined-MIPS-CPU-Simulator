@@ -1,0 +1,84 @@
+Cycle 1:
+WB: None   
+MEM: None   
+EX: None   
+ID: None
+IF: lw $2, 8($0)
+
+Cycle 2:
+WB: None   
+MEM: None   
+EX: None   
+ID: lw $2, 8($0)
+IF: lw $3, 16($0)
+
+Cycle 3:
+WB: None   
+MEM: None   
+EX: lw $2, 8($0)  01 010 11
+ID: lw $3, 16($0)
+IF: beq $2, $3, 1
+
+Cycle 4:
+WB: None   
+MEM: lw $2, 8($0)  010 11
+EX: lw $3, 16($0)  01 010 11
+ID: None
+IF: beq $2, $3, 1
+
+Cycle 5:
+WB: lw $2, 8($0)  11
+MEM: lw $3, 16($0)  010 11
+EX: None   
+ID: None
+IF: beq $2, $3, 1
+
+Cycle 6:
+WB: lw $3, 16($0)  11
+MEM: None   
+EX: None   
+ID: beq $2, $3, 1
+IF: add $4, $2, $3
+
+Cycle 7:
+WB: None   
+MEM: None   
+EX: beq $2, $3, 1  X0 100 0X
+ID: None
+IF: sw $4, 24($0)
+
+Cycle 8:
+WB: None   
+MEM: beq $2, $3, 1  100 0X
+EX: None   
+ID: sw $4, 24($0)
+IF: None
+
+Cycle 9:
+WB: beq $2, $3, 1  0X
+MEM: None   
+EX: sw $4, 24($0)  X1 001 0X
+ID: None
+IF: None
+
+Cycle 10:
+WB: None   
+MEM: sw $4, 24($0)  001 0X
+EX: None   
+ID: None
+IF: None
+
+Cycle 11:
+WB: sw $4, 24($0)  0X
+MEM: None   
+EX: None   
+ID: None
+IF: None
+
+Final Registers: [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Final Memory: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Need 9 cyclesWB stage... NoneMEM stage... NoneEX stage... NoneID stage... NoneIF stage... lw $2, 8($0)WB stage... NoneMEM stage... NoneEX stage... NoneID stage... lw $2, 8($0)IF stage... lw $3, 16($0)WB stage... NoneMEM stage... NoneEX stage... lw $2, 8($0) 01 010 11ID stage... lw $3, 16($0)IF stage... beq $2, $3, 1WB stage... NoneMEM stage... lw $2, 8($0) 010 11EX stage... lw $3, 16($0) 01 010 11ID stage... beq $2, $3, 1IF stage... add $4, $2, $3WB stage... lw $2, 8($0) 11MEM stage... lw $3, 16($0) 010 11EX stage... NoneID stage... beq $2, $3, 1IF stage... add $4, $2, $3WB stage... lw $3, 16($0) 11MEM stage... NoneEX stage... NoneID stage... beq $2, $3, 1IF stage... add $4, $2, $3WB stage... NoneMEM stage... NoneEX stage... beq $2, $3, 1 X0 100 0XID stage... NoneIF stage... sw $4, 24($0)WB stage... NoneMEM stage... beq $2, $3, 1 100 0XEX stage... NoneID stage... sw $4, 24($0)IF stage... NoneWB stage... beq $2, $3, 1 0XMEM stage... NoneEX stage... sw $4, 24($0) X1 001 0XID stage... NoneIF stage... NoneWB stage... NoneMEM stage... sw $4, 24($0) 001 0XEX stage... NoneID stage... NoneIF stage... NoneWB stage... sw $4, 24($0) 0XMEM stage... NoneEX stage... NoneID stage... NoneIF stage... NoneFinal Registers: [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Final Memory: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Need 9 cyclesWB stage... NoneMEM stage... NoneEX stage... NoneID stage... NoneIF stage... lw $2, 8($0)WB stage... NoneMEM stage... NoneEX stage... NoneID stage... lw $2, 8($0)IF stage... lw $3, 16($0)WB stage... NoneMEM stage... NoneEX stage... lw $2, 8($0) 01 010 11ID stage... lw $3, 16($0)IF stage... beq $2, $3, 1WB stage... NoneMEM stage... lw $2, 8($0) 010 11EX stage... lw $3, 16($0) 01 010 11ID stage... beq $2, $3, 1IF stage... add $4, $2, $3WB stage... lw $2, 8($0) 11MEM stage... lw $3, 16($0) 010 11EX stage... NoneID stage... beq $2, $3, 1IF stage... add $4, $2, $3WB stage... lw $3, 16($0) 11MEM stage... NoneEX stage... NoneID stage... beq $2, $3, 1IF stage... add $4, $2, $3WB stage... NoneMEM stage... NoneEX stage... beq $2, $3, 1 X0 100 0XID stage... NoneIF stage... sw $4, 24($0)WB stage... NoneMEM stage... beq $2, $3, 1 100 0XEX stage... NoneID stage... sw $4, 24($0)IF stage... NoneWB stage... beq $2, $3, 1 0XMEM stage... NoneEX stage... sw $4, 24($0) X1 001 0XID stage... NoneIF stage... NoneWB stage... NoneMEM stage... sw $4, 24($0) 001 0XEX stage... NoneID stage... NoneIF stage... NoneWB stage... sw $4, 24($0) 0XMEM stage... NoneEX stage... NoneID stage... NoneIF stage... NoneFinal Registers: [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Final Memory: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Need 9 cycles

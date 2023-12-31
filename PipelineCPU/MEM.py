@@ -19,8 +19,11 @@ class MEM:
             self.MEM_WB = EX_MEM
             
             print(f"MEM stage... {self.MEM_WB} {self.MEM_WB.getSignal('MEM')}")
+            with open ('result.txt','a') as file:
+                file.write(f"MEM stage... {self.MEM_WB} {self.MEM_WB.getSignal('MEM')}")  
         else:
             self.MEM_WB = None
             print(f"MEM stage... {self.MEM_WB}")
-
+            with open ('result.txt', 'a') as file:
+                file.write(f"MEM stage... {self.MEM_WB}")
         return self.MEM_WB

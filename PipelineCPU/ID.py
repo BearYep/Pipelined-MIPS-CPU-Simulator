@@ -18,6 +18,8 @@ class ID:
             self.ID_EX = None
 
         print(f"ID stage... {self.ID_EX}")
+        with open ('result.txt', 'a') as file:
+            file.write(f"ID stage... {self.ID_EX}")
         return self.ID_EX
     
     def decode(self, IF_ID):
