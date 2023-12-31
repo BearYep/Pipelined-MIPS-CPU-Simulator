@@ -20,10 +20,10 @@ class MEM:
             
             print(f"MEM stage... {self.MEM_WB} {self.MEM_WB.getSignal('MEM')}")
             with open ('result.txt','a') as file:
-                file.write(f"MEM stage... {self.MEM_WB} {self.MEM_WB.getSignal('MEM')}")  
+                file.write(f"MEM stage... {self.MEM_WB} {self.MEM_WB.getSignal('MEM')}\n")  
         else:
             self.MEM_WB = None
             print(f"MEM stage... {self.MEM_WB}")
             with open ('result.txt', 'a') as file:
-                file.write(f"MEM stage... {self.MEM_WB}")
+                file.write(f"MEM stage... {self.MEM_WB}\n")
         return self.MEM_WB

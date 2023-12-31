@@ -42,6 +42,9 @@ class CPU:
 
         self.result = []
 
+        with open ('result.txt','w') as file:
+            file.write('')
+
         while True:
             stall = False
             cycle += 1
@@ -50,6 +53,8 @@ class CPU:
             #     print(len(self.instruction_memory))
 
             print(f'Cycle {cycle}')
+            with open ('result.txt','a') as file:
+                file.write(f'Cycle {cycle}\n')
             #要傳reg和mem給要用的
             self.WB.run(self.MEM_WB, self.reg)
             self.MEM_WB = self.MEM.run(self.EX_MEM, self.mem, self.reg)
@@ -107,5 +112,5 @@ class CPU:
                 with open ('result.txt', 'a') as file: 
                     file.write('Final Registers: {}\n'.format(self.reg))
                     file.write('Final Memory: {}\n'.format(self.mem))
-                    file.write(f'Need {self.pc} cycles')
+                    file.write(f'Need {cycle} cycles')
                 break

@@ -10,12 +10,10 @@ def detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit):
         # MEM hazard
         if MEM_WB.RegWrite and (MEM_WB.rd != 0) and not (EX_MEM.RegWrite and (EX_MEM.rd != 0)
             and (EX_MEM.rd == ID_EX.rs)) and (MEM_WB.rd == ID_EX.rs):
-            # Forward to rs
             forwardingUnit.ForwardA = 0b01
 
         if MEM_WB.RegWrite and (MEM_WB.rd != 0) and not (EX_MEM.RegWrite and (EX_MEM.rd != 0)
             and (EX_MEM.rd == ID_EX.rt)) and (MEM_WB.rd == ID_EX.rt):
-            # Forward to rt
             forwardingUnit.ForwardB = 0b01
 
 def load_use_hazard(IF_ID, ID_EX):

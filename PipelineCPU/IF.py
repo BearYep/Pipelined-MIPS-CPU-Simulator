@@ -43,5 +43,5 @@ class IF:
         print(f"IF stage... {self.IF_ID}")
         #print(instructionMem[pc])
         with open ('result.txt','a') as file:
-            file.write(f"IF stage... {self.IF_ID}")
+            file.write(f"IF stage... {self.IF_ID}\n")
         return self.IF_ID
