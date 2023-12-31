@@ -3,7 +3,7 @@ from PipelineCPU.ID import ID
 from PipelineCPU.EX import EX
 from PipelineCPU.MEM import MEM
 from PipelineCPU.WB import WB
-import DataHazardUnit
+import HazardUnit
 from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 
@@ -60,7 +60,7 @@ class CPU:
             #EX有沒有做事 AND 做完(beq)之後有沒有預測有沒有錯 =True=> pass ID、改新PC
             if(self.EX_MEM and self.EX.branch_flag):
                 self.pc = self.EX.update_PC
-                self.IF_ID = DataHazardUnit.NOP()
+                self.IF_ID = HazardUnit.NOP()
                 #stall = True
             # elif(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX) and beq_count == 0):
             #     if(self.IF_ID.opcode == 'beq'):
@@ -73,9 +73,9 @@ class CPU:
             #     self.ID.run(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
             #     self.ID_EX = None
                  
-            if(DataHazardUnit.load_use_hazard(self.IF_ID, self.ID_EX)):
+            if(HazardUnit.load_use_hazard(self.IF_ID, self.ID_EX)):
                 stall = True
-            condition = DataHazardUnit.branch_hazard(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, ForwardingUnit())
+            condition = HazardUnit.branch_hazard(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, ForwardingUnit())
             if(condition == 0b10):
                 stall = True
             elif(condition == 0b11):
@@ -88,7 +88,7 @@ class CPU:
                     self.IF.run(self.instruction_memory, self.pc)
                     self.pc -= 1
                 
-                self.ID_EX = DataHazardUnit.NOP()
+                self.ID_EX = HazardUnit.NOP()
             else:
                 self.ID_EX = self.ID.run(self.IF_ID, self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
                 self.IF_ID = self.IF.run(self.instruction_memory, self.pc)

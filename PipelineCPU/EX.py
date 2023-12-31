@@ -1,4 +1,4 @@
-import DataHazardUnit
+import HazardUnit
 from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 class EX:
@@ -9,7 +9,7 @@ class EX:
     def calculate(self, ID_EX, EX_MEM, MEM_WB, reg, instructionMem, forwardingUnit):    
         result_rs = reg[ID_EX.rs]
         result_rt = reg[ID_EX.rt]
-        DataHazardUnit.detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit)
+        HazardUnit.detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit)
         if(forwardingUnit.ForwardA == 0b10 and EX_MEM):
             result_rs = EX_MEM.result
         if(forwardingUnit.ForwardB == 0b10 and EX_MEM):

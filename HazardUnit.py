@@ -1,8 +1,3 @@
-
-def detection(ID_EX, EX_MEM, MEM_WB):
-    if not forwarding(ID_EX, EX_MEM, MEM_WB):
-        NOP()
-
 def detect_Hazard(ID_EX, EX_MEM, MEM_WB, forwardingUnit):
     if EX_MEM and MEM_WB:
         # EX hazard

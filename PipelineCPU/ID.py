@@ -1,4 +1,4 @@
-import DataHazardUnit
+import HazardUnit
 from PipelineCPU.ForwardingUnit import ForwardingUnit
 
 class ID:
@@ -35,7 +35,7 @@ class ID:
         forwardingUnit = ForwardingUnit()
         result_rs = reg[IF_ID.rs]
         result_rt = reg[IF_ID.rt]
-        condition = DataHazardUnit.branch_hazard(IF_ID, ID_EX, EX_MEM, MEM_WB, forwardingUnit)
+        condition = HazardUnit.branch_hazard(IF_ID, ID_EX, EX_MEM, MEM_WB, forwardingUnit)
         if(condition == 0b01):
             if(forwardingUnit.ForwardA == 0b10):
                 result_rs = EX_MEM.result
