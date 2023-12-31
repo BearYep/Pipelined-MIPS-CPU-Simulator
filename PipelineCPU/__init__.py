@@ -23,7 +23,6 @@ class CPU:
         self.ID_EX = None
         self.EX_MEM = None
         self.MEM_WB = None
-        self.END = None
 
         self.IF = IF()
         self.ID = ID()
@@ -52,7 +51,7 @@ class CPU:
 
             print(f'Cycle {cycle}')
             #要傳reg和mem給要用的
-            self.END = self.WB.run(self.MEM_WB, self.reg)
+            self.WB.run(self.MEM_WB, self.reg)
             self.MEM_WB = self.MEM.run(self.EX_MEM, self.mem, self.reg)
 
             self.EX_MEM = self.EX.run(self.ID_EX, self.EX_MEM, self.MEM_WB, self.reg, self.instruction_memory)
