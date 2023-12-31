@@ -2,7 +2,7 @@ class WB:
     def __init__(self):
         pass
 
-    def run(self, MEM_WB, mem, reg):
+    def run(self, MEM_WB, reg):
 
         if MEM_WB:
             
@@ -12,5 +12,6 @@ class WB:
                 reg[MEM_WB.rd] = MEM_WB.result
 
             print(f"WB stage... {MEM_WB} {MEM_WB.getSignal('WB')}")
+            return MEM_WB
         else:
             print("WB stage... None")
