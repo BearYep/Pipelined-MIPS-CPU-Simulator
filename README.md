@@ -1,23 +1,39 @@
 # Pipelined-MIPS-CPU-Simulator
+
 Pipelined MIPS CPU Simulator for computer organization final project
 
-Support five instructions, including `add`, `sub`, `beq`, `lw` and `sw`.
+The following instructions are supported, including:
+- `add`
+- `sub`
+- `beq`
+- `lw`
+- `sw`
 
-## Running
+## System Requirements
 
-### You need to run this code in `Python 3.11.5`
-Before each execution, you need to enter your test data in `./input/memory.txt`, which should be the combined language code of MIPS.
+- Python: 3.11.5
 
-Once you have done that, you can run the program directly and you will get a `result.txt` file containing the required results, see **Input & Output Files** for detailed results.
+## How to run
 
-## Input & Output Files
+- Place your test data in `./input` and name it `memory.txt` prior to running.
+
+- Run the program by 
+    ```bash
+    python main.py
+    ``` 
+
+    You will get a `result.txt` file containing the results as required for the project. 
+    See **Input & Output Files** for details.
+
+## Input & Output
 
 ### Input: `memory.txt`
-You need to enter your input into this file.
 
-The format of the `memory.txt` should be the combined language code of MIPS.
+Input instructions must be placed in this file, and the format of instructions should in the form of **MIPS**.
 
 ### Output: `result.txt`
-The simulation results will be output in this file.
 
-It contains the state of each instruction at each cycle, the number of cycles it takes for the input code to run, and the final register and memory values.
+Simulated results will be stored in this file, containing:
+- States of each instruction at each cycle
+- Numbers of cycles it takes to run the input instructions
+- Final register and memory values
