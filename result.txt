@@ -15,43 +15,37 @@ WB stage... None
 MEM stage... None
 EX stage... lw $2, 8($0) 01 010 11
 ID stage... lw $3, 16($0)
-IF stage... add $4, $2, $3
+IF stage... add $6, $4, $5
 Cycle 4
 WB stage... None
 MEM stage... lw $2, 8($0) 010 11
 EX stage... lw $3, 16($0) 01 010 11
-ID stage... add $4, $2, $3
-IF stage... sw $4, 24($0)
+ID stage... add $6, $4, $5
+IF stage... sw $6, 24($0)
 Cycle 5
 WB stage... lw $2, 8($0) 11
 MEM stage... lw $3, 16($0) 010 11
-EX stage... None
-ID stage... add $4, $2, $3
-IF stage... sw $4, 24($0)
+EX stage... add $6, $4, $5 10 000 10
+ID stage... sw $6, 24($0)
+IF stage... None
 Cycle 6
 WB stage... lw $3, 16($0) 11
-MEM stage... None
-EX stage... add $4, $2, $3 10 000 10
-ID stage... sw $4, 24($0)
+MEM stage... add $6, $4, $5 000 10
+EX stage... sw $6, 24($0) X1 001 0X
+ID stage... None
 IF stage... None
 Cycle 7
-WB stage... None
-MEM stage... add $4, $2, $3 000 10
-EX stage... sw $4, 24($0) X1 001 0X
+WB stage... add $6, $4, $5 10
+MEM stage... sw $6, 24($0) 001 0X
+EX stage... None
 ID stage... None
 IF stage... None
 Cycle 8
-WB stage... add $4, $2, $3 10
-MEM stage... sw $4, 24($0) 001 0X
-EX stage... None
-ID stage... None
-IF stage... None
-Cycle 9
-WB stage... sw $4, 24($0) 0X
+WB stage... sw $6, 24($0) 0X
 MEM stage... None
 EX stage... None
 ID stage... None
 IF stage... None
-Final Registers: [0, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Final Registers: [0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 Final Memory: [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-Need 9 cycles
+Need 8 cycles
